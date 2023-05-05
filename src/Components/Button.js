@@ -1,10 +1,12 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default Button = ({ onPress, title }) => (
-  <TouchableOpacity onPress={onPress} style={styles.button}>
-    <Text style={styles.text}>{title}</Text>
-  </TouchableOpacity>
-);
+export default Button = ({ onPress, title, state }) => {
+  return(
+    <TouchableOpacity onPress={onPress} style={[styles.button, ((state === 'e') && styles.errorButton) || ((state === 's') && styles.successButton)]}>
+      <Text style={styles.text}>{title}</Text>
+    </TouchableOpacity>
+  );
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -14,6 +16,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+  },
+  errorButton : {
+    backgroundColor: 'red',
+  },
+  successButton : {
+    backgroundColor: 'green',
   },
   text: {
     fontSize: 16,
