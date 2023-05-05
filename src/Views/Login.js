@@ -1,16 +1,43 @@
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import { TextInput, Button, Text, View, StyleSheet } from 'react-native';
+import { TextInput, Text, View, StyleSheet, Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ShakeButton from '../Components/ShakeButton/ShakeButton.js';
 
-const loginValidationSchema = yup.object().shape({
+const loginSchema = yup.object().shape({
   email: yup.string()
-    .email("Please enter valid email")
-    .required('Email Address is Required') // and must be @student.uc.pt
-    .matches(/@student.uc.pt$/, 'Email must be @student.uc.pt'),
+    .email('Invalid email')
+    .required('Email address is required') // and must be @student.uc.pt
+    .matches(/@student.uc.pt$/, 'Email must end with @student.uc.pt'),
   password: yup.string()
-    .required('Password is required'),
-})
+    .required('Password is required')
+});
+
+const shakeAnimation = new Animated.Value(0);
+const startShake = () => {
+  Animated.sequence([
+    Animated.timing(shakeAnimation, {
+      toValue: 10,
+      duration: 100,
+      useNativeDriver: true,
+    }),
+    Animated.timing(shakeAnimation, {
+      toValue: -10,
+      duration: 100,
+      useNativeDriver: true,
+    }),
+    Animated.timing(shakeAnimation, {
+      toValue: 10,
+      duration: 100,
+      useNativeDriver: true,
+    }),
+    Animated.timing(shakeAnimation, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: true,
+    }),
+  ]).start();
+};
 
 export default Login = ({setToken, tryLogin}) => {
   const storeData = async (value) => {
@@ -19,25 +46,25 @@ export default Login = ({setToken, tryLogin}) => {
     .then((token) => {
       if (token === undefined) {
         console.log("Invalid Credentials");
-        return;
+        startShake();
+        return
       }
-      // if login is successful, store data and set token state
-      setToken(token);
       try {
+        // if login is successful, store data and set token state
         AsyncStorage.setItem('@storage_Key', JSON.stringify(value))
+        setToken(token);
       } catch (e) {
-        console.log(e); // error while saving data
+        console.log('Error', e); // error while saving data
       }
-    })
-    .catch((error) => {
-      console.log(error); // error while trying to login
-    })
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   return (
     <View style={styles.loginContainer}>
       <Formik
-        validationSchema={loginValidationSchema}
+        validationSchema={loginSchema}
         initialValues={{ email: '', password: '' }}
         onSubmit={(values) => storeData(values)}
       >
@@ -45,25 +72,29 @@ export default Login = ({setToken, tryLogin}) => {
           <>
             <TextInput
               name='email'
-              placeholder='Email Address'
-              style={styles.textInput}
+              placeholder='email@student.uc.pt'
+              style={[styles.textInput, (errors.email && touched.email) && styles.errorInput]}
               onChangeText={handleChange('email')}
               onBlur={() => {handleBlur('email')}}
               value={values.email}
-              keyboardType="email-address"
+              keyboardType='email-address'
+              caretHidden={false}
+              autoCapitalize='none'
             />
-            {(errors.email && touched.email) && <Text style={styles.errorText}>{errors.email}</Text>}
+            <Text style={[styles.errorText, (errors.email && touched.email) && {opacity: 1}]}>{errors.email}</Text>
             <TextInput
               name='password'
               placeholder="Password"
-              style={styles.textInput}
+              style={[styles.textInput, (errors.password && touched.password) && styles.errorInput]}
               onChangeText={handleChange('password')}
               onBlur={() => {handleBlur('password')}}
               value={values.password}
+              caretHidden={false}
               secureTextEntry
             />
-            {(errors.password && touched.password) && <Text style={styles.errorText}>{errors.password}</Text>}
-            <Button onPress={handleSubmit} title="Submit" />
+            <Text style={[styles.errorText, (errors.password && touched.password) && {opacity: 1}]}>{errors.password}</Text>
+            <ShakeButton _onPress={handleSubmit} title='Login' shakeAnimation={shakeAnimation}/>
+            <Text style={{fontSize: 10, color: 'gray', marginTop: 10}}>Made by: Filipe Rodrigues</Text>
           </>
         )}
       </Formik>
@@ -73,6 +104,7 @@ export default Login = ({setToken, tryLogin}) => {
 
 const styles = StyleSheet.create({
   loginContainer: {
+    height: 200,
     width: '80%',
     alignItems: 'center',
     backgroundColor: 'white',
@@ -80,11 +112,12 @@ const styles = StyleSheet.create({
     elevation: 10,
     backgroundColor: '#e6e6e6',
     borderRadius: 10,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
   },
   textInput: {
     height: 40,
     width: '100%',
-    margin: 10,
     backgroundColor: 'white',
     borderColor: 'gray',
     borderWidth: StyleSheet.hairlineWidth,
@@ -92,7 +125,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   errorText: {
+    padding: 5,
     fontSize: 10,
     color: 'red',
+    opacity: 0,
   },
+  errorInput: {
+    borderColor: 'red',
+  }
 })
