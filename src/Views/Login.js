@@ -1,8 +1,8 @@
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import { TextInput, Text, View, StyleSheet, Animated } from 'react-native';
+import { TextInput, Text, View, StyleSheet, Animated, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ShakeButton from '../Components/ShakeButton/ShakeButton.js';
+import ShakeButton from '../Components/ShakeButton.js';
 
 const loginSchema = yup.object().shape({
   email: yup.string()
@@ -73,6 +73,7 @@ export default Login = ({setToken, tryLogin}) => {
             <TextInput
               name='email'
               placeholder='email@student.uc.pt'
+              placeholderTextColor={'gray'}
               style={[styles.textInput, (errors.email && touched.email) && styles.errorInput]}
               onChangeText={handleChange('email')}
               onBlur={() => {handleBlur('email')}}
@@ -85,6 +86,7 @@ export default Login = ({setToken, tryLogin}) => {
             <TextInput
               name='password'
               placeholder="Password"
+              placeholderTextColor={'gray'}
               style={[styles.textInput, (errors.password && touched.password) && styles.errorInput]}
               onChangeText={handleChange('password')}
               onBlur={() => {handleBlur('password')}}
@@ -102,15 +104,19 @@ export default Login = ({setToken, tryLogin}) => {
   )
 }
 
+getHeigth = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   loginContainer: {
+    position: 'absolute',
+    top: getHeigth/2 - 100,
     height: 200,
     width: '80%',
     alignItems: 'center',
-    backgroundColor: 'white',
     padding: 10,
     elevation: 10,
-    backgroundColor: '#e6e6e6',
+    backgroundColor: '#2d2d2d',
+    color: 'white',
     borderRadius: 10,
     flexDirection: 'column',
     justifyContent: 'space-around',
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
   textInput: {
     height: 40,
     width: '100%',
-    backgroundColor: 'white',
+    color: 'white',
     borderColor: 'gray',
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 10,
