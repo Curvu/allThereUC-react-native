@@ -1,10 +1,12 @@
 import React from 'react';
 import Login from './src/Views/Login.js';
 import Main from './src/Views/Main.js'
-import { StyleSheet, KeyboardAvoidingView, Dimensions } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// force white background on android
 
 export default App = () => {
   const [token, setToken] = useState(null)
@@ -43,16 +45,11 @@ export default App = () => {
   );
 }
 
-const getHeigth = Dimensions.get('window').height;
-const getWidth = Dimensions.get('window').width;
-
-
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    width: getWidth,
-    top: getHeigth/2 - 100,
-    backgroundColor: '#fff',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#1b1b1b',
     alignItems: 'center',
     justifyContent: 'center',
   },
