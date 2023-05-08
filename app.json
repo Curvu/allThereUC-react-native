@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "faster-uc",
-    "slug": "faster-uc",
+    "slug": "dei-fast-presence",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cuvu.fasteruc"
     },
     "android": {
       "userInterfaceStyle": "light",
