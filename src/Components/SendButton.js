@@ -1,32 +1,37 @@
 import { useState } from 'react';
-import { Pressable, Text, StyleSheet, Animated } from 'react-native';
+import { Pressable, Text, StyleSheet } from 'react-native';
 
 export default Button = ({ onPress, title, state, style, titleStyle }) => {
   const [pressed, setPressed] = useState('#1e90ff');
 
   return(
-    <Animated.View
+    <Pressable
+      onPress={onPress}
       style={[
         styles.button,
         style,
         {borderColor: pressed},
         ((state === 'e') && styles.errorButton) || ((state === 's') && styles.successButton),
       ]}
+      onPressIn={() => setPressed('#fff')}
+      onPressOut={() => setPressed('#1e90ff')}
     >
-      <Pressable onPress={onPress} style={[styles.button, styles.click]} onPressIn={() => setPressed('#fff')} onPressOut={() => setPressed('#1e90ff')}>
-        <Text style={[styles.text, titleStyle]}>{title}</Text>
-      </Pressable>
-    </Animated.View>
+      <Text style={[styles.text, titleStyle]}>{title}</Text>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
+    position: 'absolute',
+    top: '40%',
     width: 200,
-    height: 50,
+    height: 200,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10,
+    borderRadius: 100,
+    borderWidth: 4,
+    borderColor: '#1e90ff',
   },
   errorButton : {
     borderColor: 'red',
@@ -39,10 +44,6 @@ const styles = StyleSheet.create({
     color: 'white',
     textDecorationStyle: 'solid',
     textTransform: 'capitalize',
-  },
-  click: {
-    width: '100%',
-    height: '100%',
   },
   onPressed: {
     borderColor: 'white'
