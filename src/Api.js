@@ -32,13 +32,13 @@ const getAula = (token) => new Promise((resolve, reject) => {
       session = element.key;
       let start = new Date(element.start_date);
       let end = new Date(element.end_date);
-
+      
       let now = Date.now();
-      if ((now < end)) { // now > start && now < end
-        resolve({ aula, session });
-        break;
-      } else resolve({ aula: null, session: null});
+      if ((now > start && now < end)) break;
+      aula = null;
+      session = null;
     }
+    resolve({ aula, session });
   }).catch(error => { resolve({ aula: null, session: null}) });
 });
 
