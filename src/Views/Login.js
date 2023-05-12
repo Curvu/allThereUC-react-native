@@ -3,6 +3,7 @@ import * as yup from 'yup'
 import { TextInput, Text, View, StyleSheet, Animated, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ShakeButton from '../Components/ShakeButton.js';
+import { tryLogin } from '../Api.js';
 
 const loginSchema = yup.object().shape({
   email: yup.string()
@@ -39,26 +40,24 @@ const startShake = () => {
   ]).start();
 };
 
-export default Login = ({setToken, tryLogin}) => {
+export default Login = ({setToken}) => {
   const storeData = async (value) => {
     // first try to login
-    await tryLogin(value.email, value.password)
-    .then((token) => {
-      if (token === undefined) {
-        console.log("Invalid Credentials");
-        startShake();
-        return
-      }
+    const token = await tryLogin(value.email, value.password);
+    if (token === '') {
+      console.log("Invalid Credentials");
+      startShake();
+      return
+    } else {
       try {
         // if login is successful, store data and set token state
         AsyncStorage.setItem('@storage_Key', JSON.stringify(value))
         setToken(token);
       } catch (e) {
         console.log('Error', e); // error while saving data
+        startShake();
       }
-    }).catch((error) => {
-      console.log(error);
-    });
+    }
   }
 
   return (
