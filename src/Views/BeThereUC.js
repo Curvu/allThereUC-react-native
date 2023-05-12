@@ -48,7 +48,7 @@ const pressedStart = () => {
 }
 
 
-export default Main = ({token, setToken}) => {
+export default BeThereUC = ({token, setToken}) => {
   const [font, setFont] = useState(false);
   const [button, setButton] = useState('');
 
