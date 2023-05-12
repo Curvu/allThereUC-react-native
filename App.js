@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from './src/Views/Login.js';
-import Main from './src/Views/Main.js'
+import BeThereUC from './src/Views/BeThereUC.js'
 import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,8 +20,8 @@ export default App = () => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
-      { token !== null ? 
-        <Main token={token} setToken={setToken}/>
+      { token !== '' ? 
+        <BeThereUC token={token} setToken={setToken}/>
         :
         <Login setToken={setToken}/>
       }
