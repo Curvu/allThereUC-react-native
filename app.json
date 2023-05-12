@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "faster-uc",
-    "slug": "dei-fast-presence",
+    "name": "allThereUC",
+    "slug": "allthereuc",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -37,7 +37,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "68194caa-7773-4e84-83b2-6f8629f54af0"
+        "projectId": "24f1d731-c5c4-43c2-b5c5-8af9c3802c1d"
       }
     },
     "owner": "curvu",
